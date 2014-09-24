@@ -12,7 +12,7 @@
              },
              "endTrial": {
                ".read":  "root.child('management/sites/' + $site + '/users').hasChild(auth.email.replace('.', ',1'))"
-             },
+             }
             }
           }
         },
@@ -123,7 +123,7 @@
                  ".validate": false 
                 }
               }
-            },
+            }
           },
           "sites": {
             "$site" : {
@@ -145,7 +145,7 @@
                 "$user": {
                   // A user can only write to this if that user is an owner, or the user is on the potential users list (and is the one writing)
                   ".write": "root.child('management/sites/' + $site + '/owners').hasChild(auth.email.replace('.', ',1')) ||
-                             (root.child('management/sites/' + $site + '/potential_users/' + $user).exists() == true && $user == auth.email.replace('.', ',1'))",
+                             (root.child('management/sites/' + $site + '/potential_users/' + $user).exists() == true && $user == auth.email.replace('.', ',1'))"
                 }
               },
               "potential_users": {
@@ -187,34 +187,37 @@
                   },
                   "$other": {
                     ".validate": false
-                  },
-                },
+                  }
+                }
               },
               "error": {
                 ".read": true,
-                ".write": "root.child('management/sites/' + $site + '/owners').hasChild(auth.email.replace('.', ',1'))",
+                ".write": "root.child('management/sites/' + $site + '/owners').hasChild(auth.email.replace('.', ',1'))"
               },
               "$other": {
                 ".validate": false 
               },
               ".validate": "newData.hasChildren(['owners']) && $site === $site.toLowerCase()",
               // Owners and users can read all the information in here, potential users can not
-              ".read": "data.exists() && (data.child('owners').hasChild(auth.email.replace('.', ',1')) || data.child('users').hasChild(auth.email.replace('.', ',1')))",
+             ".read": "data.exists() && (data.child('owners').hasChild(auth.email.replace('.', ',1')) || data.child('users').hasChild(auth.email.replace('.', ',1')))",             
               ".write": false
-            },
+            }
           },
           "users": {
             "$user": {
+              "verification": {
+                ".read": true
+              },
               "sites": {
                 "users" : { 
                   "$site" : {
                     ".write": "$user === auth.email.replace('.', ',1') || root.child('management/sites/' + $site + '/owners').hasChild(auth.email.replace('.', ',1'))"
-                  }
+                  }                  
                 },
                 "owners" : {  
                   "$site" : {
                     ".write": "$user === auth.email.replace('.', ',1') || root.child('management/sites/' + $site + '/owners').hasChild(auth.email.replace('.', ',1'))"
-                  }
+                  }                 
                 },
                 ".read": "$user === auth.email.replace('.', ',1')",
                 "$site" : {
@@ -229,8 +232,8 @@
               "$other": {
                 ".validate": false
               }
-            },
-          },
+            }
+          }
         },
         ".read": "false",
         ".write": "false"
